@@ -16,6 +16,8 @@ namespace Catolog.Models
         public Quiz Quiz { get; set; }=null!;
 
         public List<QustionAnswer>? QustionAnswers { get; set; }
+
+        public List<QustionAnswerPicked>? QustionAnswersPicked { get; set; }
         
         public DateTimeOffset CreatedDate {get; init; }
 

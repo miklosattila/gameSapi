@@ -6,9 +6,6 @@ namespace Catolog.Models
 
         public string? Name {get;set;}
 
-        public int MapEntityId { get; set; }
-
-        public MapEntity MapEntity { get; set; } =null!;
 
         public DateTimeOffset CreatedDate {get; init; }
 

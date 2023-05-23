@@ -7,7 +7,7 @@ namespace Catolog.Controllers;
 
 
     [ApiController]
-    [Route("api/")]
+    [Route("player/")]
     public class PlayerController : ControllerBase{
         private readonly IPlayerServices _playerServices;
 

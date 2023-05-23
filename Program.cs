@@ -3,6 +3,9 @@ global using Catolog.Models;
 global using Catolog.Dtos.PlayerDto;
 using Catolog.Data;
 using Microsoft.EntityFrameworkCore;
+using Catolog.Services.MapServices;
+using Catolog.Services.QuizServices;
+using Catolog.Services.AnswerPickServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +18,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddScoped<IPlayerServices,PlayerServices>();
+builder.Services.AddScoped<IMapServices,MapServices>();
+builder.Services.AddScoped<IQuizServices, QuizServices>();
+builder.Services.AddScoped<IAnswerPickServices, AnswerPickServices>();
 
 
 var app = builder.Build();
