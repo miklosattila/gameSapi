@@ -6,10 +6,11 @@ using Microsoft.EntityFrameworkCore;
 using Catolog.Services.MapServices;
 using Catolog.Services.QuizServices;
 using Catolog.Services.AnswerPickServices;
+using Catolog.Services.QuestionServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<DataContext>( options => options.UseSqlServer(builder.Configuration.GetConnectionString("LocalConnection")));
+builder.Services.AddDbContext<DataContext>( options => options.UseSqlServer(builder.Configuration.GetConnectionString("AzureConnection")));
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -21,6 +22,7 @@ builder.Services.AddScoped<IPlayerServices,PlayerServices>();
 builder.Services.AddScoped<IMapServices,MapServices>();
 builder.Services.AddScoped<IQuizServices, QuizServices>();
 builder.Services.AddScoped<IAnswerPickServices, AnswerPickServices>();
+builder.Services.AddScoped<IQuestionServices, QuestionServices>();
 
 
 var app = builder.Build();

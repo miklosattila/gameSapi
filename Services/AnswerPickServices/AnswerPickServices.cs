@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Catolog.Data;
 using Catolog.Dtos.QustionAnswerPickedDto;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Catolog.Services.AnswerPickServices
@@ -19,18 +20,34 @@ namespace Catolog.Services.AnswerPickServices
             _context = context;
             _mapper=mapper;
         }
-        public async Task<ServiceResponse<List<AddQustionAnswerPickedDto>>> AddAnswer(AddQustionAnswerPickedDto addQustionAnswerPickedDto)
+
+        public async Task<ServiceResponse<GetQustionAnswerPickedDto>> GetAnswerPicked(int id)
         {
-            var serviceResponse = new ServiceResponse<List<AddQustionAnswerPickedDto>>();
-            var answer = _mapper.Map<QustionAnswerPicked>(addQustionAnswerPickedDto);
-            _context.QustionAnswersPicked.Add(answer);
+            var serviceResponse = new ServiceResponse<GetQustionAnswerPickedDto>();
+            var answer = await _context.QustionAnswersPicked.FirstOrDefaultAsync(c => c.Id == id);
+            if(answer is not null){
+                serviceResponse.Data = _mapper.Map<GetQustionAnswerPickedDto>(answer);
+                return serviceResponse;
+                }
+            serviceResponse.Success=false;
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<GetQustionAnswerPickedDto>> PickAnswer(AddQustionAnswerPickedDto request)
+        {
+            var newQustionAnswerPicked = new QustionAnswerPicked
+            {
+                Corrrect=request.Corrrect,
+
+                IncorrectAnswerNumber=request.IncorrectAnswerNumber,
+
+                QuestionId=request.QuestionId
+            };
+
+            await _context.QustionAnswersPicked.AddAsync(newQustionAnswerPicked);
             await _context.SaveChangesAsync();
 
-             serviceResponse.Data =
-                await _context.QustionAnswersPicked
-                    .Select(c => _mapper.Map<AddQustionAnswerPickedDto>(c))
-                    .ToListAsync();
-            return serviceResponse;
+            return await GetAnswerPicked(newQustionAnswerPicked.Id);
         }
     }
 }

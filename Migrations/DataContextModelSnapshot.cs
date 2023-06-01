@@ -50,8 +50,6 @@ namespace Catolog.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PlayerId");
-
                     b.ToTable("Maps");
                 });
 
@@ -142,6 +140,29 @@ namespace Catolog.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Players");
+                });
+
+            modelBuilder.Entity("Catolog.Models.PlayerMap", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("MapId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PlayerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MapId");
+
+                    b.HasIndex("PlayerId");
+
+                    b.ToTable("PlayerMap");
                 });
 
             modelBuilder.Entity("Catolog.Models.Question", b =>
@@ -291,15 +312,46 @@ namespace Catolog.Migrations
                     b.ToTable("QustionAnswers");
                 });
 
-            modelBuilder.Entity("Catolog.Models.Map", b =>
+            modelBuilder.Entity("Catolog.Models.QustionAnswerPicked", b =>
                 {
-                    b.HasOne("Catolog.Models.Player", "Player")
-                        .WithMany("Maps")
-                        .HasForeignKey("PlayerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Navigation("Player");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Corrrect")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("CreatedAT")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
+
+                    b.ToTable("QustionAnswersPicked");
+                });
+
+            modelBuilder.Entity("MapPlayer", b =>
+                {
+                    b.Property<int>("MapsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PlayersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MapsId", "PlayersId");
+
+                    b.HasIndex("PlayersId");
+
+                    b.ToTable("MapPlayer");
                 });
 
             modelBuilder.Entity("Catolog.Models.MapEntity", b =>
@@ -315,6 +367,25 @@ namespace Catolog.Migrations
                         .IsRequired();
 
                     b.Navigation("EntityType");
+                });
+
+            modelBuilder.Entity("Catolog.Models.PlayerMap", b =>
+                {
+                    b.HasOne("Catolog.Models.Map", "Map")
+                        .WithMany()
+                        .HasForeignKey("MapId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Catolog.Models.Player", "Player")
+                        .WithMany()
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Map");
+
+                    b.Navigation("Player");
                 });
 
             modelBuilder.Entity("Catolog.Models.Question", b =>
@@ -365,6 +436,32 @@ namespace Catolog.Migrations
                     b.Navigation("Question");
                 });
 
+            modelBuilder.Entity("Catolog.Models.QustionAnswerPicked", b =>
+                {
+                    b.HasOne("Catolog.Models.Question", "Question")
+                        .WithMany("QustionAnswersPicked")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Question");
+                });
+
+            modelBuilder.Entity("MapPlayer", b =>
+                {
+                    b.HasOne("Catolog.Models.Map", null)
+                        .WithMany()
+                        .HasForeignKey("MapsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Catolog.Models.Player", null)
+                        .WithMany()
+                        .HasForeignKey("PlayersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Catolog.Models.Map", b =>
                 {
                     b.Navigation("MapEntities");
@@ -372,14 +469,11 @@ namespace Catolog.Migrations
                     b.Navigation("Quiz");
                 });
 
-            modelBuilder.Entity("Catolog.Models.Player", b =>
-                {
-                    b.Navigation("Maps");
-                });
-
             modelBuilder.Entity("Catolog.Models.Question", b =>
                 {
                     b.Navigation("QustionAnswers");
+
+                    b.Navigation("QustionAnswersPicked");
                 });
 
             modelBuilder.Entity("Catolog.Models.Quiz", b =>

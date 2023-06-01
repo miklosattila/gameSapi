@@ -24,6 +24,7 @@ namespace Catolog.Controllers
     {
         return Ok(await _mapServices.GetAllByPlayer(id));
     }
+    
     [HttpGet("GetAllQuiz/{id}")]
     public async Task<ActionResult<ServiceResponse<List<GetMapWithAllResourcesDto>>>> GetAllQuiz(int id)
     {

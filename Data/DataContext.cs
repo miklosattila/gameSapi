@@ -22,6 +22,7 @@ namespace Catolog.Data
         public DbSet<Quiz> Quizzes => Set<Quiz>();
         public DbSet<QuizAnswer> QuizAnswers => Set<QuizAnswer>();
         public DbSet<QustionAnswerPicked> QustionAnswersPicked => Set<QustionAnswerPicked>();
+        public DbSet<PlayerMap> PlayerMap => Set<PlayerMap>();
 
 
     }

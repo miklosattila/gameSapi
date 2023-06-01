@@ -27,24 +27,6 @@ namespace Catolog.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Players",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Age = table.Column<int>(type: "int", nullable: false),
-                    CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    ExitDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    QuizScore = table.Column<int>(type: "int", nullable: false),
-                    GameScore = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Players", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Maps",
                 columns: table => new
                 {
@@ -60,12 +42,24 @@ namespace Catolog.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Maps", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Maps_Players_PlayerId",
-                        column: x => x.PlayerId,
-                        principalTable: "Players",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Players",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Age = table.Column<int>(type: "int", nullable: false),
+                    CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    ExitDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    QuizScore = table.Column<int>(type: "int", nullable: false),
+                    GameScore = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Players", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -118,6 +112,56 @@ namespace Catolog.Migrations
                         name: "FK_Quizzes_Maps_MapId",
                         column: x => x.MapId,
                         principalTable: "Maps",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MapPlayer",
+                columns: table => new
+                {
+                    MapsId = table.Column<int>(type: "int", nullable: false),
+                    PlayersId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MapPlayer", x => new { x.MapsId, x.PlayersId });
+                    table.ForeignKey(
+                        name: "FK_MapPlayer_Maps_MapsId",
+                        column: x => x.MapsId,
+                        principalTable: "Maps",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MapPlayer_Players_PlayersId",
+                        column: x => x.PlayersId,
+                        principalTable: "Players",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PlayerMap",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PlayerId = table.Column<int>(type: "int", nullable: false),
+                    MapId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PlayerMap", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PlayerMap_Maps_MapId",
+                        column: x => x.MapId,
+                        principalTable: "Maps",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PlayerMap_Players_PlayerId",
+                        column: x => x.PlayerId,
+                        principalTable: "Players",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -201,6 +245,28 @@ namespace Catolog.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "QustionAnswersPicked",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Corrrect = table.Column<bool>(type: "bit", nullable: false),
+                    QuestionId = table.Column<int>(type: "int", nullable: false),
+                    CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    CreatedAT = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_QustionAnswersPicked", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_QustionAnswersPicked_Questions_QuestionId",
+                        column: x => x.QuestionId,
+                        principalTable: "Questions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_MapEntitys_EntityTypeId",
                 table: "MapEntitys",
@@ -212,8 +278,18 @@ namespace Catolog.Migrations
                 column: "MapId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Maps_PlayerId",
-                table: "Maps",
+                name: "IX_MapPlayer_PlayersId",
+                table: "MapPlayer",
+                column: "PlayersId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlayerMap_MapId",
+                table: "PlayerMap",
+                column: "MapId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlayerMap_PlayerId",
+                table: "PlayerMap",
                 column: "PlayerId");
 
             migrationBuilder.CreateIndex(
@@ -240,6 +316,11 @@ namespace Catolog.Migrations
                 name: "IX_QustionAnswers_QuestionId",
                 table: "QustionAnswers",
                 column: "QuestionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_QustionAnswersPicked_QuestionId",
+                table: "QustionAnswersPicked",
+                column: "QuestionId");
         }
 
         /// <inheritdoc />
@@ -249,10 +330,22 @@ namespace Catolog.Migrations
                 name: "MapEntitys");
 
             migrationBuilder.DropTable(
+                name: "MapPlayer");
+
+            migrationBuilder.DropTable(
+                name: "PlayerMap");
+
+            migrationBuilder.DropTable(
                 name: "QustionAnswers");
 
             migrationBuilder.DropTable(
+                name: "QustionAnswersPicked");
+
+            migrationBuilder.DropTable(
                 name: "MapEntityTypes");
+
+            migrationBuilder.DropTable(
+                name: "Players");
 
             migrationBuilder.DropTable(
                 name: "Questions");
@@ -265,9 +358,6 @@ namespace Catolog.Migrations
 
             migrationBuilder.DropTable(
                 name: "Maps");
-
-            migrationBuilder.DropTable(
-                name: "Players");
         }
     }
 }

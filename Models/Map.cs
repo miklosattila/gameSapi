@@ -4,7 +4,7 @@ namespace Catolog.Models
     {
         public int Id {get;init;}
 
-        public Player Player {get; set;}=null!;
+        public List<Player> Players {get; set;}=null!;
 
         public int  PlayerId {get;set;}
 

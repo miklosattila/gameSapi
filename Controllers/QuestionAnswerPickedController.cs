@@ -21,12 +21,12 @@ namespace Catolog.Controllers
         }
 
         [HttpPut("PickAnswer")]
-        public async Task<ActionResult> UpdatePlayerScore(AddQustionAnswerPickedDto addQustionAnswerPickedDto){
+        public async Task<ActionResult> PickAnswer(AddQustionAnswerPickedDto request){
 
-            var response = await _quizrServices.AddAnswer(addQustionAnswerPickedDto);
-            if( response.Data is null){
-                return NotFound(response);
+            if( request is null){
+                return NotFound(request);
             }
+            var response = await _quizrServices.PickAnswer(request);
             return Ok(response);
 
         }
