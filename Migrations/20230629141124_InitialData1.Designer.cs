@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Catolog.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230530140224_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20230629141124_InitialData1")]
+    partial class InitialData1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,7 +33,7 @@ namespace Catolog.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CreatedAT")
+                    b.Property<string>("CreatedAt")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTimeOffset>("CreatedDate")
@@ -70,7 +70,7 @@ namespace Catolog.Migrations
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("EntityTypeId")
+                    b.Property<int>("MapEntityTypeid")
                         .HasColumnType("int");
 
                     b.Property<int>("MapId")
@@ -84,7 +84,7 @@ namespace Catolog.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EntityTypeId");
+                    b.HasIndex("MapEntityTypeid");
 
                     b.HasIndex("MapId");
 
@@ -98,6 +98,9 @@ namespace Catolog.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("Code")
+                        .HasColumnType("int");
 
                     b.Property<string>("CreatedAT")
                         .HasColumnType("nvarchar(max)");
@@ -359,9 +362,11 @@ namespace Catolog.Migrations
 
             modelBuilder.Entity("Catolog.Models.MapEntity", b =>
                 {
-                    b.HasOne("Catolog.Models.MapEntityType", "EntityType")
-                        .WithMany()
-                        .HasForeignKey("EntityTypeId");
+                    b.HasOne("Catolog.Models.MapEntityType", "MapEntityType")
+                        .WithMany("MapEntity")
+                        .HasForeignKey("MapEntityTypeid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Catolog.Models.Map", null)
                         .WithMany("MapEntities")
@@ -369,7 +374,7 @@ namespace Catolog.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("EntityType");
+                    b.Navigation("MapEntityType");
                 });
 
             modelBuilder.Entity("Catolog.Models.PlayerMap", b =>
@@ -470,6 +475,11 @@ namespace Catolog.Migrations
                     b.Navigation("MapEntities");
 
                     b.Navigation("Quiz");
+                });
+
+            modelBuilder.Entity("Catolog.Models.MapEntityType", b =>
+                {
+                    b.Navigation("MapEntity");
                 });
 
             modelBuilder.Entity("Catolog.Models.Question", b =>

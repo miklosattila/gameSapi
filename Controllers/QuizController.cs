@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Catolog.Dtos.QuestionDto;
 using Catolog.Dtos.QuizDto;
 using Catolog.Services.QuizServices;
 using Microsoft.AspNetCore.Mvc;
@@ -27,10 +28,17 @@ namespace Catolog.Controllers
         }
 
         [HttpGet("GetQuizQuestion/{id}")]
-        public async Task<ActionResult<ServiceResponse<GetQuizDto>>> GetQuizQuestions(int id)
-        {
-            return Ok(await _quizrServices.GetQuizQuestions(id));
-        }
+public async Task<ActionResult<ServiceResponse<List<GetQuestionDto>>>> GetQuizQuestions(int id)
+{
+    var response = await _quizrServices.GetQuizQuestions(id);
+
+    if (!response.Success)
+    {
+        return BadRequest(response);
+    }
+
+    return Ok(response.Data);
+}
     }
 
      

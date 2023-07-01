@@ -14,7 +14,7 @@ namespace Catolog.Models
 
         /// folyamatosan metsen 
         public int QuizScore {get; set;}=0;
-        /// folyamatosan metsen 
+
         public int GameScore {get;set;}=0;
 
         public List<Map>? Maps { get; set; }

@@ -15,6 +15,5 @@ namespace Catolog.Dtos.QuizAnswerDto
         
         public int Score {get; set;}
 
-        public List<Question>? AllQustionAnswers { get; set; }
     }
 }

@@ -19,11 +19,16 @@ namespace Catolog.Controllers
             this._mapServices = _mapServices;
         }
 
-    [HttpGet("GetAllByPlayer/{id}")]
-    public async Task<ActionResult<ServiceResponse<List<GetMapWithAllResourcesDto>>>> GetAllByPlayer(int id)
+    [HttpGet("GetById/{id}")]
+    public async Task<ActionResult<ServiceResponse<List<GetMapWithAllResourcesDto>>>> GetById(int id)
     {
-        return Ok(await _mapServices.GetAllByPlayer(id));
+        return Ok(await _mapServices.GetById(id));
     }
+    // [HttpGet("GetAllByID/{id}")]
+    // public async Task<ActionResult<ServiceResponse<List<GetMapWithAllResourcesDto>>>> GetAllByID(int id)
+    // {
+    //     return Ok(await _mapServices.GetAllByPlayer(id));
+    // }
     
     [HttpGet("GetAllQuiz/{id}")]
     public async Task<ActionResult<ServiceResponse<List<GetMapWithAllResourcesDto>>>> GetAllQuiz(int id)

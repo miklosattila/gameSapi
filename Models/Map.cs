@@ -20,7 +20,7 @@ namespace Catolog.Models
         
         public DateTimeOffset CreatedDate {get; init; }
 
-        public string? CreatedAT {get; init; }
+        public string? CreatedAt {get; init; }
 
 
 

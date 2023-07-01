@@ -5,8 +5,9 @@ namespace Catolog.Models
         public int Id {get;init;}
 
         public int MapId {get;set;}
-
-        public MapEntityType? EntityType {get;set;}
+        public int  MapEntityTypeid {get;set;}
+        public MapEntityType MapEntityType {get;set;}
+    
         public int Xcoordinate {get;set;}
 
         public int Ycoordinate {get;set;}

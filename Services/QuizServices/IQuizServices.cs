@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Catolog.Dtos.QuestionDto;
 using Catolog.Dtos.QuizDto;
 
 namespace Catolog.Services.QuizServices
@@ -9,6 +10,6 @@ namespace Catolog.Services.QuizServices
     public interface IQuizServices
     {
        Task<ServiceResponse<List<GetQuizDto>>> GetAllQuiz();
-       Task<ServiceResponse<GetQuizDto>> GetQuizQuestions(int id);
+       Task<ServiceResponse<List<GetQuestionDto>>> GetQuizQuestions(int id);
     }
 }

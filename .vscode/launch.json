@@ -30,6 +30,13 @@
             "name": ".NET Core Attach",
             "type": "coreclr",
             "request": "attach"
-        }
+        },
+        {
+            "name": ".NET Core Attach EF Migrations",
+            "type": "coreclr",
+            "request": "attach",
+            "processId": "${command:pickProcess}",
+            "args": ["ef", "database", "update", "InitialData3"]
+          }
     ]
 }

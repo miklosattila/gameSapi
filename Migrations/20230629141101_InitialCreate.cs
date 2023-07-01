@@ -17,6 +17,7 @@ namespace Catolog.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Code = table.Column<int>(type: "int", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     CreatedAT = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -37,7 +38,7 @@ namespace Catolog.Migrations
                     Latitude = table.Column<int>(type: "int", nullable: false),
                     Longitude = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    CreatedAT = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    CreatedAt = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -69,7 +70,7 @@ namespace Catolog.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     MapId = table.Column<int>(type: "int", nullable: false),
-                    EntityTypeId = table.Column<int>(type: "int", nullable: true),
+                    MapEntityTypeid = table.Column<int>(type: "int", nullable: false),
                     Xcoordinate = table.Column<int>(type: "int", nullable: false),
                     Ycoordinate = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
@@ -79,10 +80,11 @@ namespace Catolog.Migrations
                 {
                     table.PrimaryKey("PK_MapEntitys", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_MapEntitys_MapEntityTypes_EntityTypeId",
-                        column: x => x.EntityTypeId,
+                        name: "FK_MapEntitys_MapEntityTypes_MapEntityTypeid",
+                        column: x => x.MapEntityTypeid,
                         principalTable: "MapEntityTypes",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_MapEntitys_Maps_MapId",
                         column: x => x.MapId,
@@ -268,9 +270,9 @@ namespace Catolog.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_MapEntitys_EntityTypeId",
+                name: "IX_MapEntitys_MapEntityTypeid",
                 table: "MapEntitys",
-                column: "EntityTypeId");
+                column: "MapEntityTypeid");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MapEntitys_MapId",
